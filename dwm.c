@@ -60,7 +60,7 @@
 
 /* macros for usings xresources */
 #define XRESOURCE_LOAD_META(NAME)					\
-	XrmGetResource(xrdb, "dwm." NAME, "dwm." NAME, &type, &ret)	\
+	XrmGetResource(xrdb, "dwm." NAME, "dwm." NAME, &type, &ret);	\
 	if (ret.addr != NULL && !strncmp("String", type, 64))
 
 #define XRESOURCE_LOAD_STRING(NAME, DST)	\
