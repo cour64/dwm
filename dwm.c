@@ -35,6 +35,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
 #include <X11/Xproto.h>
+#include <X11/Xresource.h>
 #include <X11/Xutil.h>
 #ifdef XINERAMA
 #include <X11/extensions/Xinerama.h>
@@ -56,6 +57,27 @@
 #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
 #define TAGMASK                 ((1 << LENGTH(tags)) - 1)
 #define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
+
+/* macros for usings xresources */
+#define XRESOURCE_LOAD_META(NAME)					\
+	XrmGetResource(xrdb, "dwm." NAME, "dwm." NAME, &type, &ret)	\
+	if (ret.addr != NULL && !strncmp("String", type, 64))
+
+#define XRESOURCE_LOAD_STRING(NAME, DST)	\
+	XRESOURCE_LOAD_META(NAME)		\
+		DST = ret.addr;
+
+// #define XRESOURCE_LOAD_CHAR(NAME, DST)		\
+// 	XRESOURCE_LOAD_META(NAME)		\
+// 		DST = ret.addr[0];
+//
+// #define XRESOURCE_LOAD_INTEGER(NAME, DST)		\
+// 	XRESOURCE_LOAD_META(NAME)			\
+// 		DST = strtoul(ret.addr, NULL, 10);
+//
+// #define XRESOURCE_LOAD_FLOAT(NAME, DST)		\
+// 	XRESOURCE_LOAD_META(NAME)		\
+// 		DST = strtof(ret.addr, NULL);
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
@@ -2133,6 +2155,36 @@ zoom(const Arg *arg)
 	pop(c);
 }
 
+/* load xresources */
+void
+xrdb_load(void)
+{
+	/* XXX */
+	char *xrm;
+	char *type;
+	XrmDatabase xrdb;
+	XrmValue ret;
+	Display *dpy;
+
+	if(!(dpy = XOpenDisplay(NULL)))
+		die("Can't open display\n");
+
+	XrmInitialize();
+	xrm = XResourceManagerString(dpy);
+
+	if (xrm != NULL) {
+		xrdb = XrmGetStringDatabase(xrm);
+
+    XRESOURCE_LOAD_STRING("normbordercolor", normbordercolor);
+    XRESOURCE_LOAD_STRING("normbgcolor", normbgcolor);
+    XRESOURCE_LOAD_STRING("normfgcolor", normfgcolor);
+    XRESOURCE_LOAD_STRING("selbordercolor", selbordercolor);
+    XRESOURCE_LOAD_STRING("selbgcolor", selbgcolor);
+    XRESOURCE_LOAD_STRING("selfgcolor", selfgcolor);
+	}
+	XFlush(dpy);
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -2145,6 +2197,7 @@ main(int argc, char *argv[])
 	if (!(dpy = XOpenDisplay(NULL)))
 		die("dwm: cannot open display");
 	checkotherwm();
+  xrdb_load();
 	setup();
 #ifdef __OpenBSD__
 	if (pledge("stdio rpath proc exec", NULL) == -1)
