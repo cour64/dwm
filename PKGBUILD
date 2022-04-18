@@ -12,7 +12,7 @@ makedepends=('git')
 provides=('dwm')
 conflicts=('dwm')
 source=(dwm.desktop
-        "$_pkgname::git+https://github.com/cour64/dwm.git")
+        "$_pkgname::git+https://github.com/cour64/dwm.git#branch=production")
 sha256sums=('bc36426772e1471d6dd8c8aed91f288e16949e3463a9933fee6390ee0ccd3f81'
             'SKIP')
 
