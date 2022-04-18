@@ -11,10 +11,8 @@ depends=('libx11' 'libxinerama' 'libxft')
 makedepends=('git')
 provides=('dwm')
 conflicts=('dwm')
-source=(dwm.desktop
-        "$_pkgname::git+https://github.com/cour64/dwm.git#branch=patch-xresources-with-signal-reload")
-sha256sums=('bc36426772e1471d6dd8c8aed91f288e16949e3463a9933fee6390ee0ccd3f81'
-            'SKIP')
+source=("$_pkgname::git+https://github.com/cour64/dwm.git#branch=patch-xresources-with-signal-reload")
+sha256sums=('SKIP')
 
 prepare() {
   cd $_pkgname
