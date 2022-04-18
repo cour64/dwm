@@ -67,18 +67,6 @@
 	XRESOURCE_LOAD_META(NAME)		\
 		DST = ret.addr;
 
-// #define XRESOURCE_LOAD_CHAR(NAME, DST)		\
-// 	XRESOURCE_LOAD_META(NAME)		\
-// 		DST = ret.addr[0];
-//
-// #define XRESOURCE_LOAD_INTEGER(NAME, DST)		\
-// 	XRESOURCE_LOAD_META(NAME)			\
-// 		DST = strtoul(ret.addr, NULL, 10);
-//
-// #define XRESOURCE_LOAD_FLOAT(NAME, DST)		\
-// 	XRESOURCE_LOAD_META(NAME)		\
-// 		DST = strtof(ret.addr, NULL);
-
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
 enum { SchemeNorm, SchemeSel }; /* color schemes */
@@ -256,7 +244,7 @@ static int xerror(Display *dpy, XErrorEvent *ee);
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
-static void loadxrdb(void);
+static void xrdb_load(void);
 
 /* variables */
 static const char broken[] = "broken";
